@@ -82,7 +82,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           radius: 110.0,
-          //child: Image.asset('assets/logothing.jpg'),
+          child: Image.asset('assets/logothing.jpg'),
         ));
   }
 }
