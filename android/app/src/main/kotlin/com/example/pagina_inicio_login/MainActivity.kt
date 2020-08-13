@@ -1,4 +1,4 @@
-package com.example.pagina_inicio_login
+package com.example.blog_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
