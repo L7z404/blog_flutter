@@ -1,6 +1,6 @@
+import 'package:blog_flutter/Mapping.dart';
 import 'package:flutter/material.dart';
-import 'package:blog_flutter/HomePage.dart';
-import 'package:blog_flutter/loginRegisterPage.dart';
+import 'Authentication.dart';
 
 void main() {
   runApp(BlogApp());
@@ -15,7 +15,9 @@ class BlogApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: MappingPage(
+        auth: Auth(),
+      ),
     );
   }
 }
