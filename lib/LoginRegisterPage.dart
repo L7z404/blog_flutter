@@ -1,3 +1,4 @@
+import 'package:blog_flutter/DialogBox.dart';
 import 'package:flutter/material.dart';
 import 'Authentication.dart';
 import 'dart:async';
@@ -14,6 +15,8 @@ class LoginRegisterPage extends StatefulWidget {
 enum FormType { login, register }
 
 class _LoginRegisterPageState extends State<LoginRegisterPage> {
+  DialogBox dialogBox = new DialogBox();
+
   final formKey = GlobalKey<FormState>();
   FormType _formType = FormType.login;
   String _email = '';
@@ -36,14 +39,19 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
       try {
         if (_formType == FormType.login) {
           String userId = await widget.auth.SignIn(_email, _password);
+          dialogBox.information(
+              context, 'Bienvenido', 'Ha iniciado sesión con exito');
           print("login userId =" + userId);
         } else {
           String userId = await widget.auth.SignUp(_email, _password);
+          dialogBox.information(
+              context, 'Feliciades', "Tu cuenta ha sido creada con exito!");
           print("Register userId =" + userId);
         }
 
         widget.onSignedIn();
       } catch (e) {
+        dialogBox.information(context, 'Error = ', e.toString());
         print("Error = " + e.toString());
       }
     }
@@ -96,9 +104,9 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
         height: 20.0,
       ),
       TextFormField(
-        decoration: InputDecoration(labelText: 'Email'),
+        decoration: InputDecoration(labelText: 'Correo'),
         validator: (value) {
-          return value.isEmpty ? 'Email is required' : null;
+          return value.isEmpty ? 'El correo es obligatorio' : null;
         },
         onSaved: (value) {
           return _email = value;
@@ -108,10 +116,10 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
         height: 10.0,
       ),
       TextFormField(
-        decoration: InputDecoration(labelText: 'Password'),
+        decoration: InputDecoration(labelText: 'Contraseña'),
         obscureText: true,
         validator: (value) {
-          return value.isEmpty ? 'Password is required' : null;
+          return value.isEmpty ? 'La contraseña es obligatoria' : null;
         },
         onSaved: (value) {
           return _password = value;
@@ -128,7 +136,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
       return [
         RaisedButton(
           child: Text(
-            "Login",
+            "Iniciar Sesión",
             style: TextStyle(fontSize: 20.0),
           ),
           textColor: Colors.white,
@@ -137,7 +145,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
         ),
         FlatButton(
           child: Text(
-            "Not have an Account? Create Account?",
+            "¿No tienes una cuenta? ¿Crear una cuenta?",
             style: TextStyle(fontSize: 14.0),
           ),
           textColor: Colors.blue,
@@ -149,7 +157,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
       return [
         RaisedButton(
           child: Text(
-            "Create Account",
+            "Crear cuenta",
             style: TextStyle(fontSize: 20.0),
           ),
           textColor: Colors.white,
@@ -158,7 +166,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
         ),
         FlatButton(
           child: Text(
-            "Already have an Account? Login",
+            "¿Ya tienes una cuenta? Inicia sesión",
             style: TextStyle(fontSize: 14.0),
           ),
           textColor: Colors.blue,
