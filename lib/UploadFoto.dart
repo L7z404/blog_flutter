@@ -15,11 +15,12 @@ class _UploadFotoPageState extends State<UploadFotoPage> {
   File sampleImage;
   String _myValue;
   final formKey = new GlobalKey<FormState>();
+  final picker = ImagePicker();
 
   Future getImage() async {
-    var tempImage;
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
-      sampleImage = tempImage;
+      sampleImage = File(pickedFile.path);
     });
   }
 
