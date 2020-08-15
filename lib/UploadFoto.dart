@@ -54,8 +54,10 @@ class _UploadFotoPageState extends State<UploadFotoPage> {
 
   void saveToDatabase(url) {
     var currentTime = new DateTime.now();
-    var formatDate = new DateFormat('MMM d, yyyy');
-    var formatTime = new DateFormat('EEEE, hh:mm aaa');
+    //var formatDate = new DateFormat('d MMM, yyyy');
+    var formatDate = new DateFormat.d('es_ES').add_MMM().addPattern("yyyy");
+    //var formatTime = new DateFormat('EEEE, hh:mm aaa');
+    var formatTime = new DateFormat.EEEE('es_ES').add_jm().addPattern("aaa");
 
     String date = formatDate.format(currentTime);
     String time = formatTime.format(currentTime);
