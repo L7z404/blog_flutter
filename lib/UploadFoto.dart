@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:blog_flutter/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +15,7 @@ class UploadFotoPage extends StatefulWidget {
 class _UploadFotoPageState extends State<UploadFotoPage> {
   File sampleImage;
   String _myValue;
+  String url;
   final formKey = new GlobalKey<FormState>();
   final picker = ImagePicker();
 
@@ -34,6 +36,46 @@ class _UploadFotoPageState extends State<UploadFotoPage> {
     }
   }
 
+  void uploadStatusImage() async {
+    if (validateAndSave()) {
+      final StorageReference postImageRef =
+          FirebaseStorage.instance.ref().child("Publicar Imagenes");
+      var timekey = new DateTime.now();
+      final StorageUploadTask uploadTask =
+          postImageRef.child(timekey.toString() + ".jpg").putFile(sampleImage);
+
+      var ImageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+      url = ImageUrl.toString();
+      print("Image Url = " + url);
+      goToHomePage();
+      saveToDatabase(url);
+    }
+  }
+
+  void saveToDatabase(url) {
+    var currentTime = new DateTime.now();
+    var formatDate = new DateFormat('MMM d, yyyy');
+    var formatTime = new DateFormat('EEEE, hh:mm aaa');
+
+    String date = formatDate.format(currentTime);
+    String time = formatTime.format(currentTime);
+
+    DatabaseReference ref = FirebaseDatabase.instance.reference();
+    var data = {
+      "imagen": url,
+      "descripcion": _myValue,
+      "fecha": date,
+      "hora": time,
+    };
+    ref.child("Publicaciones").push().set(data);
+  }
+
+  void goToHomePage() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return HomePage();
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +83,7 @@ class _UploadFotoPageState extends State<UploadFotoPage> {
         centerTitle: true,
         title: Text("Subir Foto"),
       ),
+      resizeToAvoidBottomPadding: true,
       body: Center(
         child: sampleImage == null
             ? Text("Selecciona una imagen")
@@ -58,7 +101,7 @@ class _UploadFotoPageState extends State<UploadFotoPage> {
     return Container(
       child: Form(
         key: formKey,
-        child: Column(
+        child: ListView(
           children: [
             Image.file(
               sampleImage,
@@ -85,7 +128,7 @@ class _UploadFotoPageState extends State<UploadFotoPage> {
               child: Text("Agregar una nueva entrada"),
               textColor: Colors.white,
               color: Colors.blue,
-              onPressed: validateAndSave,
+              onPressed: uploadStatusImage,
             )
           ],
         ),
