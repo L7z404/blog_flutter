@@ -81,12 +81,13 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
         centerTitle: true,
         title: Text("Flutter Blog App"),
       ),
+      resizeToAvoidBottomPadding: true,
       body: Container(
         margin: EdgeInsets.all(15.0),
         child: Form(
           key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: ListView(
+            //crossAxisAlignment: CrossAxisAlignment.stretch,
             children: _createInputs() + _createButtons(),
           ),
         ),
